@@ -1,23 +1,18 @@
+#' Load Data Warehouse
+#'
+#' @param data_warehouse
+#'
+#' @return a dataframe
+#' @export
+#' @import pins
+#' @import glue
+#' @examples
 loaddw <- function(data_warehouse) {
-  # Load credentials from environment variables
-  api_key <- Sys.getenv("POSIT_CONNECT_API_KEY")
-  server_url <- Sys.getenv("POSIT_CONNECT_SERVER")
-
-  # Check if credentials are available
-  if (api_key == "" || server_url == "") {
-    stop("Please set POSIT_CONNECT_API_KEY and POSIT_CONNECT_SERVER in your .Renviron file.")
-  }
-
-  # Connect to the Posit Connect board
-  board <- pins::board_connect(
-    server = server_url,
-    auth = api_key
-  )
+  # Connect to Pins
+  pins_connect()
 
   # Load Data
-  dw_name <- glue::glue()
-  my_data <- board %>% pin_read("example-data")
-  print(my_data)
-
+  dw_name <- glue::glue("data/orc_{data_warehouse}")
+  board |>  pins::pin_read(dw_name, version = NULL)
 }
 
